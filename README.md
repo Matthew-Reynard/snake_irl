@@ -16,11 +16,13 @@ This is the snake game with a fixed grid size of 8x8 and the aim of this exercis
 *Note: This distribution requires Python 3.*
 1. If you would like to use a vitual environment (which I highly recommend), and you don't have it installed, follow the instuctions in the text file labelled "Virtual_Environment.txt".
 2. Clone or download the repo.
-3. Run the following command: 
-	$ python setup.py install
+3. Run the following command:
+
+   $ python setup.py install
 
 4. If everything went well, you should have all the necessary libraries installed and you can now play the game using the following command:
-	$ python play.py
+
+   $ python play.py
 
 
 ### INSTRUCTIONS:

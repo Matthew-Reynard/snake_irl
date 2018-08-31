@@ -1,0 +1,30 @@
+Windows:
+
+Notes:
+"env" = virtual environment name (you choose this)
+linked with one folder
+
+Commands: (Once you've installed python and pip successfully)
+> pip install virtualenv
+> pip install virtualenvwrapper-win
+> mkvirtualenv "env" (parenthesis will appear)
+(go to your development/project folder)
+> setprojectdir .
+> deactivate (parenthesis will disappear)
+> workon "env" (very useful)
+
+Linux:
+
+Notes:
+Easier to use than on windows
+"env" = virtual environment name (you choose this)
+not linked with one folder
+
+Commands:
+$ pip install virtualenv
+$ mkdir Environment - can be any name you wish
+$ cd Environments/
+$ virtualenv "env" - again, can be any name you wish
+$ source Environments/"env"/bin/activate
+$ which python - useful command
+$ which pip/pip3 - also useful
