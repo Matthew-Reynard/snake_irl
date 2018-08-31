@@ -151,8 +151,10 @@ class Environment:
                         else:
                             made = True
         else:
-            self.snake.x = np.random.randint(1,self.GRID_SIZE-1) * self.SCALE
-            self.snake.y = np.random.randint(1,self.GRID_SIZE-1) * self.SCALE
+            # self.snake.x = np.random.randint(1,self.GRID_SIZE-1) * self.SCALE
+            # self.snake.y = np.random.randint(1,self.GRID_SIZE-1) * self.SCALE
+            self.snake.x = 2 * self.SCALE
+            self.snake.y = 2 * self.SCALE
 
         # Starting at the same spot
         # self.snake.x = 2 * self.SCALE
@@ -332,7 +334,7 @@ class Environment:
         reward = -1
 
         # Update the position of the snake head and tail
-        self.snake.update(self.SCALE, action, action_space)
+        self.snake.update(self.SCALE, action, action_space, self.pg)
 
         if self.ENABLE_WRAP:
             self.wrap()
@@ -598,6 +600,72 @@ class Environment:
 
         return action
 
+
+
+    def first_move(self):
+
+        GAME_OVER = False # NOT IMPLEMENTED YET
+
+        for event in pygame.event.get():
+            # print(event) # DEBUGGING
+
+            if event.type == pygame.QUIT:
+                self.end()
+
+            if event.type == pygame.KEYDOWN:
+                # print(event.key) #DEBUGGING
+
+                # In order to stop training and still save the Q txt file
+                if (event.key == pygame.K_q):
+                    self.end()
+
+                # Moving left
+                if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and GAME_OVER == False:
+                    if self.snake.dx == 1: # facing right
+                        self.snake.head_img = pygame.transform.rotate(self.snake.head_img, 180)
+                    elif self.snake.dy == 1: # facing down
+                        self.snake.head_img = pygame.transform.rotate(self.snake.head_img, -90)
+                    elif self.snake.dy == -1: # facing up
+                        self.snake.head_img = pygame.transform.rotate(self.snake.head_img, 90)
+                    self.snake.dx = -1
+                    self.snake.dy = 0
+                    
+                # Moving right
+                elif (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and GAME_OVER == False:
+                    if self.snake.dx == -1: # facing left
+                        self.snake.head_img = pygame.transform.rotate(self.snake.head_img, 180)
+                    elif self.snake.dy == 1: # facing down
+                        self.snake.head_img = pygame.transform.rotate(self.snake.head_img, 90)
+                    elif self.snake.dy == -1: # facing up
+                        self.snake.head_img = pygame.transform.rotate(self.snake.head_img, -90)
+                    self.snake.dx = 1
+                    self.snake.dy = 0
+
+
+                # Moving up
+                elif (event.key == pygame.K_UP or event.key == pygame.K_w) and GAME_OVER == False:
+                    if self.snake.dy == 1: # facing down
+                        self.snake.head_img = pygame.transform.rotate(self.snake.head_img, 180)
+                    elif self.snake.dx == 1: # facing right
+                        self.snake.head_img = pygame.transform.rotate(self.snake.head_img, 90)
+                    elif self.snake.dx == -1: # facing left
+                        self.snake.head_img = pygame.transform.rotate(self.snake.head_img, -90)
+                    self.snake.dx = 0
+                    self.snake.dy = -1
+
+                # Moving down
+                elif (event.key == pygame.K_DOWN or event.key == pygame.K_s) and GAME_OVER == False:
+                    if self.snake.dy == -1: # facing up
+                        self.snake.head_img = pygame.transform.rotate(self.snake.head_img, 180)
+                    elif self.snake.dx == 1: # facing right
+                        self.snake.head_img = pygame.transform.rotate(self.snake.head_img, -90)
+                    elif self.snake.dx == -1: # facing left
+                        self.snake.head_img = pygame.transform.rotate(self.snake.head_img, 90)
+                    self.snake.dx = 0
+                    self.snake.dy = 1
+
+
+
     # Lets you simply play the game
     # Need to implement a log file to record the game, to attempt a IRL Algorithm
     def play(self):
@@ -629,7 +697,9 @@ class Environment:
                     if self.countdown:
                         text = self.font.render(str(t), True, (255, 255, 255))
                         self.display.blit(text,(0,0))
+                        self.first_move()
                         pygame.display.update()
+
                         time.sleep(0.5)
                         t =  t - 1
                         if t == 0:
@@ -661,7 +731,15 @@ class Environment:
                                 self.end()
 
                             if (event.key == pygame.K_SPACE):
-                                GAME_OVER = False;
+                                if self.snake.dx == 1: # facing right
+                                    pass
+                                elif self.snake.dx == -1: # facing left
+                                    self.snake.head_img = pygame.transform.rotate(self.snake.head_img, 180)
+                                elif self.snake.dy == 1: # facing down
+                                    self.snake.head_img = pygame.transform.rotate(self.snake.head_img, 90)
+                                elif self.snake.dy == -1: # facing up
+                                    self.snake.head_img = pygame.transform.rotate(self.snake.head_img, -90)
+                                GAME_OVER = False
                                 self.countdown = True
                                 # self.log_file.writerow(["TIME_STAMP", "SNAKE_X", "SNAKE_Y", "FOOD_X", "FOOD_Y", "INPUT_BUTTON", "SCORE"])
 

@@ -24,7 +24,7 @@ class Snake:
         # PYGAME STUFF
 
         white = (255,255,255)
-        self.head_img = pygame.image.load("./Images/Head.png").convert()
+        self.head_img = pygame.image.load("./Images/Head_arrow.png").convert()
         self.head_img.set_colorkey(white) # sets white to alpha
 
         self.tail_img = pygame.image.load("./Images/Tail.png").convert()
@@ -32,8 +32,8 @@ class Snake:
 
         # self.head_mask = pygame.mask.from_surface(self.head_img) # creates a mask
 
-        # self.head_img = pygame.transform.flip(self.head_img, False, True) #
-        # self.head_img = pygame.transform.rotate(self.head_img, 90) # Start facing right
+        self.head_img = pygame.transform.flip(self.head_img, False, False) #
+        self.head_img = pygame.transform.rotate(self.head_img, -90) # Start facing right
 
         # If the images arent 20x20 pixels
         # self.head_img = pygame.transform.scale(self.head_img, (20, 20)) # scales it down from a 50x50 image to 20x20
@@ -43,7 +43,7 @@ class Snake:
         # self.box[0] = self.head_img.get_rect()
 
 
-    def update(self, scale, action, action_space):
+    def update(self, scale, action, action_space, pygame):
 
         # ACTION SPACE OF 4 - Up, Down, Left, Right
         # This is for when just using the head and food
@@ -120,9 +120,11 @@ class Snake:
                     # moving down
                     if self.dy == 1:
                         self.dx = 1 # move right
+                        self.head_img = pygame.transform.rotate(self.head_img, 90)
                     # moving up
                     elif self.dy == -1:
                         self.dx = -1 # move left
+                        self.head_img = pygame.transform.rotate(self.head_img, 90)
                     self.dy = 0
 
                 # moving left or right
@@ -130,9 +132,11 @@ class Snake:
                     # moving left
                     if self.dx == -1:
                         self.dy = 1 # move down
+                        self.head_img = pygame.transform.rotate(self.head_img, 90)
                     # moving right
                     elif self.dx == 1:
                         self.dy = -1 # move up
+                        self.head_img = pygame.transform.rotate(self.head_img, 90)
                     self.dx = 0
 
 
@@ -144,9 +148,11 @@ class Snake:
                     # moving down
                     if self.dy == 1:
                         self.dx = -1 # move left
+                        self.head_img = pygame.transform.rotate(self.head_img, -90)
                     # moving up
                     elif self.dy == -1:
                         self.dx = 1 # move right
+                        self.head_img = pygame.transform.rotate(self.head_img, -90)
                     self.dy = 0
 
                 # moving left or right
@@ -154,9 +160,11 @@ class Snake:
                     # moving left
                     if self.dx == -1:
                         self.dy = -1 # move up
+                        self.head_img = pygame.transform.rotate(self.head_img, -90)
                     # moving right
                     elif self.dx == 1:
                         self.dy = 1 # move down
+                        self.head_img = pygame.transform.rotate(self.head_img, -90)
                     self.dx = 0
             
         # Updating positions using velocity

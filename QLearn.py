@@ -173,7 +173,7 @@ def run():
 # Play the game yourself :)
 def play():
 
-	env = Environment(wrap = False, grid_size = 10, rate = 100, tail = True, obstacles = False)
+	env = Environment(wrap = False, grid_size = 10, rate = 150, tail = True, obstacles = False)
 
 	env.play()
 
