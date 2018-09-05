@@ -92,6 +92,9 @@ class Environment:
 
         self.pg = None
 
+        # Number of restarts of the game the user had, therefore a new log file is created
+        #self.log_file_number = 0
+
     # If you want to render the game to the screen, you will have to prerender
     # in order to load the textures (images)
     def prerender(self):
@@ -104,7 +107,7 @@ class Environment:
         self.clock = pygame.time.Clock()
 
         pygame.font.init()
-        self.font = pygame.font.SysFont('Comic Sans MS', 30)
+        self.font = pygame.font.SysFont('Default', 200, bold=False)
 
         # Creates a visual Snake 
         self.snake.create(pygame)
@@ -374,9 +377,9 @@ class Environment:
             # print(snake.tail_length) # DEBUGGING
             for i in range(1, self.snake.tail_length + 1):
                 if(self.snake.box[0] == (self.snake.box[i])):
-                    # done = True
+                    done = True
                     #DEBUGGING
-                    print("Crashed")
+                    # print("Crashed")
                     #print("Try again?")
 
         # Checking if the snake has reached the food
@@ -423,6 +426,7 @@ class Environment:
         info = {"time":self.time, "score":self.score}
 
         return new_state, reward, done, info
+
 
     # Given the state array, return the index of that state as an integer
     def state_index(self, state_array):
@@ -670,6 +674,12 @@ class Environment:
     # Need to implement a log file to record the game, to attempt a IRL Algorithm
     def play(self):
 
+        number_path = "./Data/log_file_number.txt"
+
+        log_file_number = np.loadtxt(number_path, dtype='int')
+
+        log_file_path = "./Data/Logs/log_file{}.csv".format(log_file_number)
+
         GAME_OVER = False
         GAME_ON = True
 
@@ -677,7 +687,8 @@ class Environment:
 
         self.prerender()
 
-        with open("./Data/log_file.csv", 'w') as f:
+        with open(log_file_path, 'w') as f:
+            log_file_number = log_file_number + 1
             self.log_file = csv.writer(f, delimiter=",") #default delimiter is a comma
             self.log_file.writerow(["TIME_STAMP", "SNAKE_X", "SNAKE_Y", "FOOD_X", "FOOD_Y", "INPUT_BUTTON", "SCORE"])
 
@@ -695,8 +706,8 @@ class Environment:
                     action = self.render()
 
                     if self.countdown:
-                        text = self.font.render(str(t), True, (255, 255, 255))
-                        self.display.blit(text,(0,0))
+                        text = self.font.render(str(t), True, (240, 240, 240))
+                        self.display.blit(text,(60,30))
                         self.first_move()
                         pygame.display.update()
 
@@ -723,11 +734,13 @@ class Environment:
                         # print(event) # DEBUGGING
 
                         if event.type == pygame.QUIT:
+                            np.savetxt(number_path, np.array([log_file_number]).astype(np.int), fmt='%d')
                             self.end()
 
                         if event.type == pygame.KEYDOWN:
                             # In order to stop training and still save the Q txt file
                             if (event.key == pygame.K_q):
+                                np.savetxt(number_path, np.array([log_file_number]).astype(np.int), fmt='%d')
                                 self.end()
 
                             if (event.key == pygame.K_SPACE):
@@ -741,6 +754,7 @@ class Environment:
                                     self.snake.head_img = pygame.transform.rotate(self.snake.head_img, -90)
                                 GAME_OVER = False
                                 self.countdown = True
+                                np.savetxt(number_path, np.array([log_file_number]).astype(np.int), fmt='%d')
                                 # self.log_file.writerow(["TIME_STAMP", "SNAKE_X", "SNAKE_Y", "FOOD_X", "FOOD_Y", "INPUT_BUTTON", "SCORE"])
 
         self.end()
