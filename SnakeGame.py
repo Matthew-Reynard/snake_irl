@@ -855,7 +855,8 @@ class Environment:
 
         self.end()
 
-
+    def noArrow(self):
+        self.snake.noArrow(pygame)
 
 # If I run this file by accident :P
 if __name__ == "__main__":

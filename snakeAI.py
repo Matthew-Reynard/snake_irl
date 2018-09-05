@@ -188,3 +188,9 @@ class Snake:
 
         # Draw head after tail     
         display.blit(self.head_img, self.box[0])
+
+
+    def noArrow(self, pygame):
+        white = (255,255,255)
+        self.head_img = pygame.image.load("./Images/Head.png").convert()
+        self.head_img.set_colorkey(white) # sets white to alpha

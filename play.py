@@ -1,22 +1,12 @@
 '''
-Simple SnakeAI Game with basic Q Learning
+Simple Snake Game
 
 INFO:
 @author: Matthew Reynard
 @year: 2018
 
-DESCRIPTION:
-QLearn.py is a a simple implementation of a Q learning algorithm with a lookup table of Q values
-You can change the code in the main() function to either train(), run(), or play() 
-- with the latter being just for fun and to explore the world and see whats happening and
-what the computer is learning to do
-
-TO DO LIST:
-- Comment all the code
-- Make a more user friendly method to change between the train, run and play methods
-- Add a score
--
-
+Controls:
+W,A,S,D - MOvement; SPACE - restart; Q - quit
 '''
 
 import numpy as np 
@@ -26,31 +16,28 @@ import sys
 import time
 from SnakeGame import Environment
 
+# Difficulty (Speed)
+# Easy = 200
+# Medium = 150
+# Hard = 100
+# Insane = 80
 
-# dimensions: (states, actions)
-def Qmatrix(x, env):
-	if x == 0:
-		Q = np.zeros((env.number_of_states(), env.number_of_actions()))
-	elif x == 1:
-		np.random.seed(0) # To ensure the results can be recreated
-		Q = np.random.rand(env.number_of_states(), env.number_of_actions()) 
-	elif x == 2:
-		Q = np.loadtxt(Q_textfile_path_load, dtype='float', delimiter=" ")
-	return Q
+difficulty = 150 
 
+logFileNumber = 9
 
-# Play the game yourself :)
+# Play the game, feel free to change the difficulty;
 def play():
 
-	env = Environment(wrap = False, grid_size = 10, rate = 150, tail = True, obstacles = False)
+	env = Environment(wrap = False, grid_size = 10, rate = difficulty, tail = True, obstacles = False)
 
 	env.play()
 
 
-# Inverse RL
+# Watch the game by changing the log file number:
 def watch():
 
-	csv_file_path = "./Data/Logs/log_file11.csv"
+	csv_file_path = "./Data/Logs/log_file{}.csv".format(logFileNumber)
 
 	RENDER_TO_SCREEN = True
 
@@ -60,13 +47,15 @@ def watch():
 	if RENDER_TO_SCREEN:
 		env.prerender()
 	
+	env.noArrow()
+
 	avg_time = 0
 	avg_score = 0
 
 	episode = 0
 
 	df = pd.read_csv(csv_file_path)
-	print(df)
+	# print(df)
 
 	GAME_OVER = False
 	GAME_ON = True
@@ -130,17 +119,15 @@ def watch():
 
 				if env.countdown:
 					text = env.font.render(str(t), True, (255, 255, 255))
-					env.display.blit(text,(180,180))
+					env.display.blit(text,(60,30))
 					env.pg.display.update()
-					time.sleep(0.5)
+					time.sleep(0.2)
 					t =  t - 1
 					if t == 0:
 						t = 3
 						env.countdown = False
 				else:
-					# print(action)
 					new_state, reward, GAME_OVER, info = env.step(action, action_space = 4)
-					# print(reward)
 
 					if reward > 0:
 						env.food.irl_make(food_Xs[my_index], food_Ys[my_index], env.SCALE)
@@ -157,7 +144,7 @@ def watch():
 		while GAME_OVER:
 
 			if my_index >= len(my_actions)-1:
-				print("Total Episodes: ", episode)
+				# print("Total Episodes: ", episode)
 				env.end()
 			else:
 				GAME_OVER = False
@@ -165,12 +152,12 @@ def watch():
 				avg_time = 0
 				avg_score = 0
 
-	print("Total Episodes: ", episode)
+	# print("Total Episodes: ", episode+1)
 	env.end()
 
 
 if __name__ == '__main__':
 
-	play()
+	# play()
 
-	# watch()
+	watch()
