@@ -1,12 +1,8 @@
 '''
-Simple Snake Game
-
-INFO:
-@author: Matthew Reynard
-@year: 2018
+Snake Game
 
 Controls:
-W,A,S,D - MOvement; SPACE - restart; Q - quit
+W,A,S,D - Movement; SPACE - restart; Q - quit
 '''
 
 import numpy as np 
@@ -158,6 +154,6 @@ def watch():
 
 if __name__ == '__main__':
 
-	# play()
+	play()
 
-	watch()
+	# watch()
