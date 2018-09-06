@@ -35,3 +35,9 @@ When you're finished playing your games, email me the zipped Data folder for me 
 
 Thanks everyone, and happy gaming :)
 
+### CHANGING THE DIFFICULTY
+*Note: This is not a perfect game, it was thrown together very quickly will little thought of it going out to the public, just expect some bugs and some input lag as well. It is not an optimized game.*
+
+If the snake is moving too fast or too slow for you, feel free to delve into the code and change the difficulty setting. I've tried to make it as easy as possible.
+
+Developer tip, the input that is pressed last on each "tick" will be the actions that is executed. Don't try and hold down buttons, this won't help, rather if you need to ensure a certain move is executed, spam the button as fast as you can.

@@ -685,6 +685,8 @@ class Environment:
 
         t = 3
 
+        start_time = time.time()
+        print(start_time)
         self.prerender()
 
         with open(log_file_path, 'w') as f:
@@ -709,10 +711,16 @@ class Environment:
                         text = self.font.render(str(t), True, (240, 240, 240))
                         self.display.blit(text,(60,30))
                         self.first_move()
+                        pygame.display.set_caption("Score: " + str(t))
                         pygame.display.update()
 
-                        time.sleep(0.5)
-                        t =  t - 1
+
+                        # time.sleep(0.5)
+                        
+                        # print(time.time() - start_time)
+                        if time.time() - start_time >= 1:
+                            t =  t - 1
+                            start_time = time.time()
                         if t == 0:
                             t = 3
                             self.countdown = False
@@ -725,7 +733,7 @@ class Environment:
                     # For the snake to look like it ate the food, render needs to be last
                     # Next piece of code if very BAD programming
                     if GAME_OVER:
-                        print("Game Over")
+                        # print("Game Over")
                         self.log_file.writerow([self.time, str(self.snake.x/self.SCALE), str(self.snake.y/self.SCALE), str(self.food.x/self.SCALE), str(self.food.y/self.SCALE), "-1", str(self.score)])
                         # self.render()
 
@@ -754,6 +762,7 @@ class Environment:
                                     self.snake.head_img = pygame.transform.rotate(self.snake.head_img, -90)
                                 GAME_OVER = False
                                 self.countdown = True
+                                start_time = time.time()
                                 np.savetxt(number_path, np.array([log_file_number]).astype(np.int), fmt='%d')
                                 # self.log_file.writerow(["TIME_STAMP", "SNAKE_X", "SNAKE_Y", "FOOD_X", "FOOD_Y", "INPUT_BUTTON", "SCORE"])
 

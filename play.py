@@ -12,15 +12,23 @@ import sys
 import time
 from SnakeGame import Environment
 
-# Difficulty (Speed)
-# Easy = 200
-# Medium = 150
-# Hard = 100
-# Insane = 80
+'''
+Difficulty (Speed)
 
+Easy = 200
+Medium = 150
+Hard = 100
+Insane = 80
+'''
 difficulty = 150 
 
-logFileNumber = 9
+'''
+If you want to watch your games, enter the log file number you want, and run watch() instead of play()
+
+A new log file is created each time you start up the game to play
+If you restart the game in the same session, the same log file is used
+'''
+logFileNumber = 0
 
 # Play the game, feel free to change the difficulty;
 def play():
