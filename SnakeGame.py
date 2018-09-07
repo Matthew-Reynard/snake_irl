@@ -446,6 +446,7 @@ class Environment:
     def set_state(self, state):
         self.state = state
 
+    # Returns the state
     def get_state(self):
         state = np.zeros(4) # Does this increase programming time dramatically?
         state[0] = int(self.snake.x / self.SCALE)
@@ -454,6 +455,7 @@ class Environment:
         state[3] = int(self.food.y / self.SCALE)
 
         return state
+
 
     # Number of states with just the head and food
     def number_of_states(self):
@@ -605,7 +607,7 @@ class Environment:
         return action
 
 
-
+    # Allows the user to decide which direction they want to go for their first move
     def first_move(self):
 
         GAME_OVER = False # NOT IMPLEMENTED YET
@@ -667,7 +669,6 @@ class Environment:
                         self.snake.head_img = pygame.transform.rotate(self.snake.head_img, 90)
                     self.snake.dx = 0
                     self.snake.dy = 1
-
 
 
     # Lets you simply play the game
