@@ -24,11 +24,12 @@ This is the snake game with a fixed grid size of 8x8 and the aim of this exercis
 
    $ python play.py
 
-5. After playing a few games, if you want to watch your games in a specific log file run the following command with the log file number as the argument
+5. After playing a few games, if you want to watch your games in a specific log file, run the following command with the log file number as the argument:
 
    $ python watch.py LOG_FILE_NUMBER
 
    e.g.
+
    $ python watch.py 0
 
 ### CONTROLS:
