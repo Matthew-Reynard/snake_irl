@@ -20,7 +20,7 @@ Medium = 150
 Hard = 100
 Insane = 80
 '''
-difficulty = 200 
+difficulty = 150 
 
 '''
 If you want to watch your games, enter the log file number you want, and run watch() instead of play()

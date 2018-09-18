@@ -31,7 +31,7 @@ When you die, you can simply press the SPACE bar to restart, or Q to quit.
 ### INSTRUCTIONS:
 Run the game using the command above, and survive for as long as you possibly can while eating as much food as possible. Try to play at least 10 games, but obviously the more you can play, the more helpful it will be. So take a break from your research, relax and play a few games of Snake.
 
-When you're finished playing your games, email me a zipped version of the Data folder. Email: [matthewreynard24@gmail.com](mailto:matthewreynard24@gmail.com)
+When you're finished playing your games, email me a zipped version of the Data folder. (email: [matthewreynard24@gmail.com](mailto:matthewreynard24@gmail.com))
 
 Thanks everyone, and happy gaming :)
 

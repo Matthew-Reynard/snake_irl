@@ -687,7 +687,7 @@ class Environment:
         t = 3
 
         start_time = time.time()
-        print(start_time)
+        # print(start_time)
         self.prerender()
 
         with open(log_file_path, 'w') as f:
