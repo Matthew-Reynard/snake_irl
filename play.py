@@ -28,7 +28,7 @@ If you want to watch your games, enter the log file number you want, and run wat
 A new log file is created each time you start up the game to play
 If you restart the game in the same session, the same log file is used
 '''
-logFileNumber = 0
+logFileNumber =  0
 
 # Play the game, feel free to change the difficulty;
 def play():
@@ -82,7 +82,8 @@ def watch():
 
 		# needs to be changed to ignore the SCALE
 		state, info = env.irl_reset(snake_Xs[my_index], snake_Ys[my_index], food_Xs[my_index], food_Ys[my_index])
-		last_action = 3
+		# last_action = 3
+		last_action = my_actions[my_index]
 
 		# print(state)
 

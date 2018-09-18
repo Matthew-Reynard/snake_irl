@@ -97,6 +97,8 @@ class Environment:
         self.countdownDisplay = False
         self.t = 3
 
+        self.first_action = "-1"
+
         # Number of restarts of the game the user had, therefore a new log file is created
         #self.log_file_number = 0
 
@@ -164,10 +166,10 @@ class Environment:
                         else:
                             made = True
         else:
-            # self.snake.x = np.random.randint(1,self.GRID_SIZE-1) * self.SCALE
-            # self.snake.y = np.random.randint(1,self.GRID_SIZE-1) * self.SCALE
-            self.snake.x = 2 * self.SCALE
-            self.snake.y = 2 * self.SCALE
+            self.snake.x = np.random.randint(1,self.GRID_SIZE-1) * self.SCALE
+            self.snake.y = np.random.randint(1,self.GRID_SIZE-1) * self.SCALE
+            # self.snake.x = 2 * self.SCALE
+            # self.snake.y = 2 * self.SCALE
 
         # Starting at the same spot
         # self.snake.x = 2 * self.SCALE
@@ -176,6 +178,8 @@ class Environment:
         # Initialise the movement to the right
         self.snake.dx = 1
         self.snake.dy = 0
+
+        self.first_action = "-1"
 
         # Update the head position of the snake
         self.snake.box[0] = (self.snake.x, self.snake.y)
@@ -649,6 +653,7 @@ class Environment:
                         self.snake.head_img = pygame.transform.rotate(self.snake.head_img, 90)
                     self.snake.dx = -1
                     self.snake.dy = 0
+                    self.first_action = "2"
                     
                 # Moving right
                 elif (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and GAME_OVER == False:
@@ -660,6 +665,7 @@ class Environment:
                         self.snake.head_img = pygame.transform.rotate(self.snake.head_img, -90)
                     self.snake.dx = 1
                     self.snake.dy = 0
+                    self.first_action = "3"
 
 
                 # Moving up
@@ -672,6 +678,7 @@ class Environment:
                         self.snake.head_img = pygame.transform.rotate(self.snake.head_img, -90)
                     self.snake.dx = 0
                     self.snake.dy = -1
+                    self.first_action = "0"
 
                 # Moving down
                 elif (event.key == pygame.K_DOWN or event.key == pygame.K_s) and GAME_OVER == False:
@@ -683,6 +690,7 @@ class Environment:
                         self.snake.head_img = pygame.transform.rotate(self.snake.head_img, 90)
                     self.snake.dx = 0
                     self.snake.dy = 1
+                    self.first_action = "1"
 
 
     # Lets you simply play the game
@@ -718,7 +726,7 @@ class Environment:
 
                 self.reset()
 
-                self.log_file.writerow(["-1", str(self.snake.x/self.SCALE), str(self.snake.y/self.SCALE), str(self.food.x/self.SCALE), str(self.food.y/self.SCALE), "-1", str(self.score)])
+                # self.log_file.writerow(["-1", str(self.snake.x/self.SCALE), str(self.snake.y/self.SCALE), str(self.food.x/self.SCALE), str(self.food.y/self.SCALE), "-1", str(self.score)])
 
                 while not GAME_OVER:
 
@@ -728,7 +736,6 @@ class Environment:
                         # text = self.font.render(str(self.t = 3), True, (240, 240, 240))
                         # self.display.blit(text,(60,30))
                         self.first_move()
-
 
                         # time.sleep(0.5)
                         
@@ -741,6 +748,8 @@ class Environment:
                             self.t = 3
                             self.countdown = False
                             self.countdownDisplay = False
+
+                            self.log_file.writerow(["-1", str(self.snake.x/self.SCALE), str(self.snake.y/self.SCALE), str(self.food.x/self.SCALE), str(self.food.y/self.SCALE), self.first_action, str(self.score)])
                     else:
                         # When the snake touches the food, game ends
                         # action_space has to be 3 for the players controls, 
