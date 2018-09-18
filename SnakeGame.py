@@ -84,6 +84,8 @@ class Environment:
 
         self.display = None
         self.font = None
+        self.font2 = None
+        self.font3 = None
         self.bg = None
         self.clock = None
 
@@ -91,6 +93,9 @@ class Environment:
         self.countdown = True
 
         self.pg = None
+
+        self.countdownDisplay = False
+        self.t = 3
 
         # Number of restarts of the game the user had, therefore a new log file is created
         #self.log_file_number = 0
@@ -108,6 +113,8 @@ class Environment:
 
         pygame.font.init()
         self.font = pygame.font.SysFont('Default', 200, bold=False)
+        self.font2 = pygame.font.SysFont('Default', 40, bold=False)
+        self.font3 = pygame.font.SysFont('Default', 30, bold=False)
 
         # Creates a visual Snake 
         self.snake.create(pygame)
@@ -128,6 +135,9 @@ class Environment:
 
         # Creates the grid background
         self.bg = pygame.image.load("./Images/Grid8_with_bounds.png").convert()
+
+        self.black_bg = pygame.image.load("./Images/black_bg.png").convert_alpha()
+        self.black_bg.set_alpha(128)
 
     # Reset game
     def reset(self):
@@ -284,6 +294,10 @@ class Environment:
             self.obstacle.draw(self.display)
 
         self.snake.draw(self.display)
+
+        if self.countdownDisplay:
+            text = self.font.render(str(self.t), True, (240, 240, 240))
+            self.display.blit(text,(60,30))
 
         # Update the pygame display
         pygame.display.update()
@@ -684,11 +698,13 @@ class Environment:
         GAME_OVER = False
         GAME_ON = True
 
-        t = 3
+        self.t = 3
 
         start_time = time.time()
         # print(start_time)
         self.prerender()
+
+        self.countdownDisplay = True
 
         with open(log_file_path, 'w') as f:
             log_file_number = log_file_number + 1
@@ -709,22 +725,22 @@ class Environment:
                     action = self.render()
 
                     if self.countdown:
-                        text = self.font.render(str(t), True, (240, 240, 240))
-                        self.display.blit(text,(60,30))
+                        # text = self.font.render(str(self.t = 3), True, (240, 240, 240))
+                        # self.display.blit(text,(60,30))
                         self.first_move()
-                        pygame.display.set_caption("Score: " + str(t))
-                        pygame.display.update()
 
 
                         # time.sleep(0.5)
                         
                         # print(time.time() - start_time)
                         if time.time() - start_time >= 1:
-                            t =  t - 1
+                            self.t =  self.t - 1
                             start_time = time.time()
-                        if t == 0:
-                            t = 3
+                            # print(self.t)
+                        if self.t == 0:
+                            self.t = 3
                             self.countdown = False
+                            self.countdownDisplay = False
                     else:
                         # When the snake touches the food, game ends
                         # action_space has to be 3 for the players controls, 
@@ -739,6 +755,15 @@ class Environment:
                         # self.render()
 
                 while GAME_OVER:
+                    self.display.blit(self.black_bg, (0, 0))
+                    self.display.blit(self.font2.render("Press SPACE", True, (250, 250, 250)) ,(15,30))
+                    self.display.blit(self.font3.render("to restart", True, (250, 250, 250)) ,(60,60))
+                    self.display.blit(self.font2.render("Press Q", True, (250, 250, 250)) ,(45,120))
+                    self.display.blit(self.font3.render("to quit", True, (250, 250, 250)) ,(70,150))
+
+                    # Update the pygame display
+                    pygame.display.update()
+
                     for event in pygame.event.get():
                         # print(event) # DEBUGGING
 
@@ -763,6 +788,7 @@ class Environment:
                                     self.snake.head_img = pygame.transform.rotate(self.snake.head_img, -90)
                                 GAME_OVER = False
                                 self.countdown = True
+                                self.countdownDisplay = True
                                 start_time = time.time()
                                 np.savetxt(number_path, np.array([log_file_number]).astype(np.int), fmt='%d')
                                 # self.log_file.writerow(["TIME_STAMP", "SNAKE_X", "SNAKE_Y", "FOOD_X", "FOOD_Y", "INPUT_BUTTON", "SCORE"])
