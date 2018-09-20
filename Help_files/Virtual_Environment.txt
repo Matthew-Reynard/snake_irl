@@ -29,6 +29,7 @@ Commands:
 -------------------------------------------------------------------
 Notes:
 ENV = virtual environment name (you choose this)
+PATH_TO_PROJECT =>  path to your development folder or project
 Not linked with one folder, but can be by using the command "setvirtualenvproject"
 
 Commands:
@@ -37,8 +38,9 @@ $ mkdir Environments
 (can be any name you wish)
 $ cd Environments/
 $ virtualenv ENV
-$ source Environments/ENV/bin/activate
+$ source ENV/bin/activate
 (parenthesis will appear on the left of the command input)
+$ cd ../PATH_TO_PROJECT
 
 Useful commands once in the virtualenv:
 $ which python
