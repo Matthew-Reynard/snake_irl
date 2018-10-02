@@ -1,6 +1,6 @@
 '''
 
-Simple SnakeAI Game 
+Simple SnakeAI Game
 
 @author: Matthew Reynard
 @year: 2018
@@ -23,7 +23,7 @@ This is because with 4 actions and a tail, it is possible to go backwards and ov
 This could just end the game (but that wont work well.. i think)
 
 Also, when having 3 actions, the game needs to know what forward means, and at this point, with just
-a head and a food, its doesn't 
+a head and a food, its doesn't
 
 '''
 
@@ -35,10 +35,11 @@ from obstacleAI import Obstacle
 import sys
 import math # Only used for infinity game time
 import time
+import os
 
 import csv
 import pandas as pd
-# import matplotlib.pyplot as plt 
+# import matplotlib.pyplot as plt
 
 # Trying to use a DQN with TF instead of the normal Q Learning
 # import tensorflow as tf
@@ -55,17 +56,17 @@ class Environment:
         self.ENABLE_WRAP = wrap
         self.ENABLE_TAIL = tail
         self.ENABLE_OBSTACLES = obstacles
-        
+
         self.DISPLAY_WIDTH = self.GRID_SIZE * self.SCALE
         self.DISPLAY_HEIGHT = self.GRID_SIZE * self.SCALE
 
         # Maximum timesteps before an episode is stopped
         self.MAX_TIME_PER_EPISODE = max_time
 
-        # Create and Initialise Snake 
+        # Create and Initialise Snake
         self.snake = Snake()
 
-        # Create Food 
+        # Create Food
         self.food = Food()
 
         # Create Obstacles
@@ -106,6 +107,7 @@ class Environment:
     # in order to load the textures (images)
     def prerender(self):
         pygame.init()
+        pygame.key.set_repeat()
 
         self.pg = pygame
 
@@ -118,10 +120,10 @@ class Environment:
         self.font2 = pygame.font.SysFont('Default', 40, bold=False)
         self.font3 = pygame.font.SysFont('Default', 30, bold=False)
 
-        # Creates a visual Snake 
+        # Creates a visual Snake
         self.snake.create(pygame)
 
-        # Creates visual Food 
+        # Creates visual Food
         self.food.create(pygame)
 
         # Creates visual Obstacles
@@ -195,7 +197,7 @@ class Environment:
         # Reset snakes tail
         self.snake.tail_length = 0
         self.snake.box.clear()
-        self.snake.box = [(self.snake.x, self.snake.y)] 
+        self.snake.box = [(self.snake.x, self.snake.y)]
 
         # Fill the state array with the snake and food coordinates on the grid
         self.state[0] = int(self.snake.x / self.SCALE)
@@ -262,7 +264,7 @@ class Environment:
         # Reset snakes tail
         self.snake.tail_length = 0
         self.snake.box.clear()
-        self.snake.box = [(self.snake.x, self.snake.y)] 
+        self.snake.box = [(self.snake.x, self.snake.y)]
 
         # Fill the state array with the snake and food coordinates on the grid
         self.state[0] = int(self.snake.x / self.SCALE)
@@ -281,9 +283,31 @@ class Environment:
 
     # Renders ONLY the CURRENT state
     def render(self):
+        # print(self.time, "render, food pos", self.food.pos, "head", (self.snake.x, self.snake.y))
 
-        # Mainly to close the window and stop program when it's running
-        action = self.controls()
+        delay_time = 0
+        start_time = time.time()
+        seconds_wait_time = self.UPDATE_RATE / 1000
+
+        action = 0
+        input_button = None
+
+        while delay_time < seconds_wait_time:
+            new_action, new_input_button = self.controls()
+
+            if new_action != 0:
+                action = new_action
+
+            if new_input_button is not None:
+                input_button = new_input_button
+
+            delay_time += (time.time() - start_time)
+
+        # # Mainly to close the window and stop program when it's running
+        # action, input_button = self.controls()
+
+        if input_button is not None:
+            self.log_file.writerow([self.time, str(self.snake.x/self.SCALE), str(self.snake.y/self.SCALE), str(self.food.x/self.SCALE), str(self.food.y/self.SCALE), str(input_button), str(self.score)])
 
         # Set the window caption to the score
         pygame.display.set_caption("Score: " + str(self.score))
@@ -315,12 +339,12 @@ class Environment:
         # Testing
         return action
 
-    # Ending the Game -  This has to be at the end of the code, 
+    # Ending the Game -  This has to be at the end of the code,
     # as the exit button on the pygame window doesn't work (not implemented yet)
     def end(self):
         pygame.quit()
         quit()
-        sys.exit(0) # safe backup  
+        sys.exit(0) # safe backup
 
 
     # If the snake goes out of the screen bounds, wrap it around
@@ -362,7 +386,7 @@ class Environment:
         else:
             if self.snake.x > self.DISPLAY_WIDTH - (self.SCALE*2):
                 reward = -10 # very negative reward, to ensure that it never crashes into the side
-                done = True 
+                done = True
             if self.snake.x < (self.SCALE*1):
                 reward = -10
                 done = True
@@ -401,26 +425,29 @@ class Environment:
                     #print("Try again?")
 
         # Checking if the snake has reached the food
-        reached_food = ((self.snake.x, self.snake.y) == (self.food.x, self.food.y)) 
+        reached_food = ((self.snake.x, self.snake.y) == (self.food.x, self.food.y))
 
         # Reward: Including the distance between them
-        # reward = 100 / (np.sqrt((self.snake.x-self.food.x)**2 + (self.snake.y-self.food.y)**2) + 1)**2 
-        
+        # reward = 100 / (np.sqrt((self.snake.x-self.food.x)**2 + (self.snake.y-self.food.y)**2) + 1)**2
+
         # If the snake reaches the food, increment score (and increase snake tail length)
         if reached_food:
             self.score += 1 # Increment score
+            # print(self.time, "food reached")
 
             # CHOOSE 1 OF THE 2 BELOW:
 
             # Create a piece of food that is not within the snake
             self.food.make(self.GRID_SIZE, self.SCALE, self.snake, self.ENABLE_OBSTACLES, self.obstacle)
+            # print("food pos", self.food.pos, "head", (self.snake.x, self.snake.y))
             # Test for one food item at a time
-            # done = True 
+            # done = True
 
             # Can't implement tail with Q learning algorithm
             if self.ENABLE_TAIL:
                 self.snake.tail_length += 1
                 self.snake.box.append((self.snake.x, self.snake.y)) #adds a rectangle variable to snake.box array(list)
+                # self.snake.box.append((self.snake.x - (self.snake.dx * self.SCALE), self.snake.y - (self.snake.dy * self.SCALE))) #adds a rectangle variable to snake.box array(list)
 
             # Reward functions
             reward = 10
@@ -455,7 +482,7 @@ class Environment:
     def sample(self):
 
         # Can't use this with a tail, else it will have a double chance of doing nothing
-        action = np.random.randint(0,4) 
+        action = np.random.randint(0,4)
         # action = np.random.randint(0,3)
         return action
 
@@ -493,7 +520,7 @@ class Environment:
     def state_vector(self):
         # (rows, columns)
         state = np.zeros(((self.GRID_SIZE**2),3))
-        
+
         # Probabily very inefficient - TODO, find a better implementation
         # This is for the HEAD and the FOOD and EMPTY, need to add a column for a TAIL later [H, T, F, E]
         for i in range(self.GRID_SIZE): # rows
@@ -522,6 +549,7 @@ class Environment:
         GAME_OVER = False # NOT IMPLEMENTED YET
 
         action = 0 # Do nothing as default
+        input_button = None
 
         for event in pygame.event.get():
             # print(event) # DEBUGGING
@@ -538,7 +566,7 @@ class Environment:
 
                 # Moving left
                 if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and GAME_OVER == False:
-                    
+
                     # Moving up or down
                     if self.snake.dy != 0:
                         # moving down
@@ -547,9 +575,9 @@ class Environment:
                         # moving up
                         elif self.snake.dy == -1:
                             action = 1 # turn left
-                        
+
                         if not self.countdown:
-                            self.log_file.writerow([self.time, str(self.snake.x/self.SCALE), str(self.snake.y/self.SCALE), str(self.food.x/self.SCALE), str(self.food.y/self.SCALE), "2", str(self.score)])
+                            input_button = 2
 
                     # Moving left or right
                     elif self.snake.dx != 0:
@@ -559,7 +587,7 @@ class Environment:
 
                 # Moving right
                 elif (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and GAME_OVER == False:
-                    
+
                     # Moving up or down
                     if self.snake.dy != 0:
                         # moving down
@@ -568,9 +596,9 @@ class Environment:
                         # moving up
                         elif self.snake.dy == -1:
                             action = 2 # turn right
-                        
+
                         if not self.countdown:
-                            self.log_file.writerow([self.time, str(self.snake.x/self.SCALE), str(self.snake.y/self.SCALE), str(self.food.x/self.SCALE), str(self.food.y/self.SCALE), "3", str(self.score)])
+                            input_button = 3
 
                     # Moving left or right
                     elif self.snake.dx != 0:
@@ -581,7 +609,7 @@ class Environment:
 
                 # Moving up
                 elif (event.key == pygame.K_UP or event.key == pygame.K_w) and GAME_OVER == False:
-                    
+
                     # Moving up or down
                     if self.snake.dy != 0:
                         action = 0
@@ -594,16 +622,16 @@ class Environment:
                         # moving right
                         elif self.snake.dx == 1:
                             action = 1 # turn left
-                        
+
                         if not self.countdown:
-                            self.log_file.writerow([self.time, str(self.snake.x/self.SCALE), str(self.snake.y/self.SCALE), str(self.food.x/self.SCALE), str(self.food.y/self.SCALE), "0", str(self.score)])
+                            input_button = 0
 
                     # log_file.writerow([pygame.time.get_ticks(), str(snake.x), str(snake.y), "W"])
 
 
                 # Moving down
                 elif (event.key == pygame.K_DOWN or event.key == pygame.K_s) and GAME_OVER == False:
-                    
+
                     # Moving up or down
                     if self.snake.dy != 0:
                         action = 0
@@ -616,13 +644,13 @@ class Environment:
                         # moving right
                         elif self.snake.dx == 1:
                             action = 2 # turn right
-                        
+
                         if not self.countdown:
-                            self.log_file.writerow([self.time, str(self.snake.x/self.SCALE), str(self.snake.y/self.SCALE), str(self.food.x/self.SCALE), str(self.food.y/self.SCALE), "1", str(self.score)])
+                            input_button = 1
 
                     # log_file.writerow([pygame.time.get_ticks(), str(snake.x), str(snake.y), "S"])
 
-        return action
+        return action, input_button
 
 
     # Allows the user to decide which direction they want to go for their first move
@@ -654,7 +682,7 @@ class Environment:
                     self.snake.dx = -1
                     self.snake.dy = 0
                     self.first_action = "2"
-                    
+
                 # Moving right
                 elif (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and GAME_OVER == False:
                     if self.snake.dx == -1: # facing left
@@ -696,11 +724,11 @@ class Environment:
     # Lets you simply play the game
     # Need to implement a log file to record the game, to attempt a IRL Algorithm
     def play(self):
-
         number_path = "./Data/log_file_number.txt"
 
         log_file_number = np.loadtxt(number_path, dtype='int')
 
+        os.makedirs("./Data/Logs/", exist_ok=True)
         log_file_path = "./Data/Logs/log_file{}.csv".format(log_file_number)
 
         GAME_OVER = False
@@ -738,10 +766,10 @@ class Environment:
                         self.first_move()
 
                         # time.sleep(0.5)
-                        
+
                         # print(time.time() - start_time)
                         if time.time() - start_time >= 1:
-                            self.t =  self.t - 1
+                            self.t -= 1
                             start_time = time.time()
                             # print(self.t)
                         if self.t == 0:
@@ -752,7 +780,7 @@ class Environment:
                             self.log_file.writerow(["-1", str(self.snake.x/self.SCALE), str(self.snake.y/self.SCALE), str(self.food.x/self.SCALE), str(self.food.y/self.SCALE), self.first_action, str(self.score)])
                     else:
                         # When the snake touches the food, game ends
-                        # action_space has to be 3 for the players controls, 
+                        # action_space has to be 3 for the players controls,
                         # because they know that the snake can't go backwards
                         s, r, GAME_OVER, i = self.step(action, action_space = 3)
 
@@ -762,6 +790,8 @@ class Environment:
                         # print("Game Over")
                         self.log_file.writerow([self.time, str(self.snake.x/self.SCALE), str(self.snake.y/self.SCALE), str(self.food.x/self.SCALE), str(self.food.y/self.SCALE), "-1", str(self.score)])
                         # self.render()
+
+                    # action = self.render()
 
                 while GAME_OVER:
                     self.display.blit(self.black_bg, (0, 0))
@@ -863,7 +893,7 @@ class Environment:
                         self.countdown = False
                 else:
                     # When the snake touches the food, game ends
-                    # action_space has to be 3 for the players controls, 
+                    # action_space has to be 3 for the players controls,
                     # because they know that the snake can't go backwards
                     s, r, GAME_OVER, i = self.step(action, action_space = 4)
 
