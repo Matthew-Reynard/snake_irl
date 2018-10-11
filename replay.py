@@ -2,25 +2,17 @@
 Snake Game
 
 Controls:
-W,A,S,D - Movement; SPACE - restart; Q - quit
+
+W,A,S,D - Movement; 
+SPACE - restart; 
+Q - quit
 '''
 
 import numpy as np 
 import pandas as pd
-import csv
-import sys
 import time
+import click
 from SnakeGame import Environment
-
-'''
-Difficulty (Speed)
-
-Easy = 200
-Medium = 150
-Hard = 100
-Insane = 80
-'''
-difficulty = 150 
 
 '''
 If you want to watch your games, enter the log file number you want, and run watch() instead of play()
@@ -28,29 +20,36 @@ If you want to watch your games, enter the log file number you want, and run wat
 A new log file is created each time you start up the game to play
 If you restart the game in the same session, the same log file is used
 '''
-logFileNumber =  int(sys.argv[1])
+# logFileNumber =  int(sys.argv[1])
 
-# Play the game, feel free to change the difficulty;
-def play():
+@click.command(options_metavar='<options>')
+@click.option("-n", "--file_number", type=int, help="Watch the games stored in this file", metavar='<int>', prompt=True)
+def watch(file_number):
+	"""
+	Watch the games in a specific log file 
 
-	env = Environment(wrap = False, grid_size = 10, rate = difficulty, tail = True, obstacles = False)
+	Default file: Last log file
+	"""
+	number_path = "./Data/log_file_number.txt"
+	log_file_number_txt = np.loadtxt(number_path, dtype='int')
 
-	env.play()
+	if file_number >= log_file_number_txt or file_number < 0:
+		print("\nYou did not enter a valid log file number!\nReplaying last log file (file number: {})\n".format(log_file_number_txt-1))
+		file_number = log_file_number_txt-1
+	else:
+		print("\nReplaying Log file {}\n".format(file_number))
 
-
-# Watch the game by changing the log file number:
-def watch():
-
-	csv_file_path = "./Data/Logs/log_file{}.csv".format(logFileNumber)
+	csv_file_path = "./Data/Logs/log_file{}.csv".format(file_number)
 
 	RENDER_TO_SCREEN = True
 
-	# rate should be 0 when not rendering, else it will lengthen training time unnecessarily
-	env = Environment(wrap = False, grid_size = 10, rate = 80, tail = True, obstacles = False)
+	# Create environment
+	env = Environment(wrap = False, grid_size = 10, rate = 90, tail = True, obstacles = False)
 
 	if RENDER_TO_SCREEN:
 		env.prerender()
 	
+	# No arrow on top of snakes head
 	env.noArrow()
 
 	avg_time = 0
@@ -126,7 +125,7 @@ def watch():
 					text = env.font.render(str(t), True, (255, 255, 255))
 					env.display.blit(text,(60,30))
 					env.pg.display.update()
-					time.sleep(0.2)
+					time.sleep(0.4)
 					t =  t - 1
 					if t == 0:
 						t = 3
@@ -161,6 +160,7 @@ def watch():
 	env.end()
 
 
+# Just incase someone types python replay.py
 if __name__ == '__main__':
 
 	watch()

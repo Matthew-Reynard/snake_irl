@@ -8,29 +8,46 @@ virtualenv (helpful, but not necessary)
 numpy  
 pygame  
 pandas
+click
 
 ### ABOUT:
-This is the snake game with a fixed grid size of 8x8 and the aim of this exercise is to gather game data from at least 1000 different games. After the data has been gathered, Inverse Reinforcement Learning algorithms will be applied  with the hope of the agent learning to play the game from you, the experts :)
+This is the snake game with a fixed grid size of 8x8 and the aim of this exercise is to gather game data from at least 1000 different games. After the data has been gathered, Inverse Reinforcement Learning algorithms will be applied with the hope of the agent learning to play the game from you, the experts :)
 
 ### INSTALLATION:
 *Note: This distribution requires Python 3.*
-1. If you would like to use a virtual environment (which I highly recommend), and you don't have it installed, follow the instuctions in the text file labelled "Virtual_Environment.txt" in the folder Help_Files.
-2. Clone or download this repo.
+1. If you would like to use a virtual environment (which I highly recommend), and you don't have virtualenv installed, follow the instructions in the text file labelled "Virtual_Environment.txt" in the Help_Files folder and after you are done, continue with step 2.
+2. Clone or download this repo into your project directory.
 3. Run the following command:
 
-   $ python setup.py install
+   $ pip install --editable .
 
 4. If everything went well, you should have all the necessary libraries installed and you can now play the game using the following command:
 
-   $ python play.py
+   $ play
 
-5. After playing a few games, if you want to watch your games in a specific log file, run the following command with the log file number as the argument:
-
-   $ python watch.py LOG_FILE_NUMBER
+   The default difficulty of the game is set to Medium. You can change the difficulty using the option -d or --difficulty with the arguments "easy", "medium", "hard" or "insane".
 
    e.g.
 
-   $ python watch.py 0
+   $ play -d insane
+
+   The following command will provide you with more details should you need it.
+
+   $ play --help 
+
+5. After playing a few games, if you want to watch your games in a specific log file, run the following command with the log file number as the argument:
+
+   $ replay -n LOG_FILE_NUMBER
+
+   e.g.
+
+   $ replay -n 0
+
+   If you forget to input a file number, you will be prompted at the start of the program.
+
+   The following command will provide you with more details should you need it.
+
+   $ replay --help 
 
 ### CONTROLS:
 The controls are the standard WASD for movement, however you can use the arrow keys if you wish.
@@ -43,9 +60,5 @@ When you're finished playing your games, email me a zipped version of the Data f
 
 Thanks everyone, and happy gaming :)
 
-### CHANGING THE DIFFICULTY
+### ATTENTION:
 *Note: This is not a perfect game, it was thrown together very quickly with little thought of it going out to the public, just expect some bugs and some input lag as well. It is not an optimized game.*
-
-If the snake is moving too fast or too slow for you, feel free to delve into the code and change the difficulty setting. I've tried to make it as easy as possible.
-
-Developer tip: the input that is pressed last on each "tick" will be the action that is executed. Don't try and hold down buttons, this won't help, rather if you need to ensure a certain move is executed, spam the button as fast as you can.

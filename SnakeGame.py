@@ -7,13 +7,12 @@ Simple SnakeAI Game
 
 Purpose: Use Tensorflow to create a RL environment to train this snake to beat the game, i.e. fill the grid
 Start Date: 5 March 2018
-Due Date: Before June
 
 DEPENDING ON THE WINDOW SIZE
 1200-1 number comes from 800/20 = 40; 600/20 = 30; 40*30 = 1200 grid blocks; subtract one for the "head"
 
 BUGS:
-To increase the FPS, from 10 to 120, the player is able to press multiple buttons before the snake is updated, mkaing the nsake turn a full 180.
+There are many
 
 NOTES:
 Action space with a tail can be 3 - forward, left, right
@@ -23,12 +22,14 @@ This is because with 4 actions and a tail, it is possible to go backwards and ov
 This could just end the game (but that wont work well.. i think)
 
 Also, when having 3 actions, the game needs to know what forward means, and at this point, with just
-a head and a food, its doesn't
+a head and a food, it doesn't
 
 '''
 
 import numpy as np
-import pygame
+import contextlib
+with contextlib.redirect_stdout(None):
+    import pygame # Allows pygame to import without printing the pygame welcome message
 from snakeAI import Snake
 from foodAI import Food
 from obstacleAI import Obstacle
@@ -36,13 +37,9 @@ import sys
 import math # Only used for infinity game time
 import time
 import os
-
 import csv
 import pandas as pd
 # import matplotlib.pyplot as plt
-
-# Trying to use a DQN with TF instead of the normal Q Learning
-# import tensorflow as tf
 
 class Environment:
 

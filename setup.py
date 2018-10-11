@@ -18,6 +18,10 @@ setup(
 	install_requires=[
 	"numpy",
 	"pygame",
-	"pandas"
-	]
+	"pandas",
+	"click"
+	],
+	entry_points={
+		'console_scripts': ['play=play:play', 'replay=replay:watch'],
+	},
 )
