@@ -13,6 +13,10 @@ click
 ### ABOUT:
 This is the snake game with a fixed grid size of 8x8 and the aim of this exercise is to gather game data from at least 1000 different games. After the data has been gathered, Inverse Reinforcement Learning algorithms will be applied with the hope of the agent learning to play the game from you, the experts :)
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Matthew-Reynard/snake_irl/master/Images/snake_irl.png" width="350" title="hover text" alt="accessibility text">
+</p>
+
 ![Snake Game Image](https://raw.githubusercontent.com/Matthew-Reynard/snake_irl/master/Images/snake_irl.png)
 
 ### INSTALLATION:
