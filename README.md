@@ -7,7 +7,7 @@ Snake game used to gather game data for IRL
 virtualenv (helpful, but not necessary)  
 numpy  
 pygame  
-pandas
+pandas  
 click
 
 ### ABOUT:
