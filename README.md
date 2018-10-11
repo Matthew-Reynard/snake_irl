@@ -18,13 +18,13 @@ This is the snake game with a fixed grid size of 8x8 and the aim of this exercis
 1. If you would like to use a virtual environment (which I highly recommend), and you don't have virtualenv installed, follow the instructions in the text file labelled "Virtual_Environment.txt" in the Help_Files folder and after you are done, continue with step 2.
 2. Clone or download this repo into your project directory.
 3. Run the following command:
-```
+   ```
    $ pip install --editable .
-```
+   ```
 4. If everything went well, you should have all the necessary libraries installed and you can now play the game using the following command:
-```
+   ```
    $ play
-```
+   ```
    The default difficulty of the game is set to Medium. You can change the difficulty using the option -d or --difficulty with the arguments "easy", "medium", "hard" or "insane".
 
    e.g.
