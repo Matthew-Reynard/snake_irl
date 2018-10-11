@@ -13,6 +13,8 @@ click
 ### ABOUT:
 This is the snake game with a fixed grid size of 8x8 and the aim of this exercise is to gather game data from at least 1000 different games. After the data has been gathered, Inverse Reinforcement Learning algorithms will be applied with the hope of the agent learning to play the game from you, the experts :)
 
+![Snake Game Image](https://raw.githubusercontent.com/Matthew-Reynard/snake_irl/master/Images/snake_irl.png)
+
 ### INSTALLATION:
 *Note: This distribution requires Python 3.*
 1. If you would like to use a virtual environment (which I highly recommend), and you don't have virtualenv installed, follow the instructions in the text file labelled "Virtual_Environment.txt" in the Help_Files folder and after you are done, continue with step 2.
@@ -25,7 +27,7 @@ This is the snake game with a fixed grid size of 8x8 and the aim of this exercis
    ```
    $ play
    ```
-   The default difficulty of the game is set to Medium. You can change the difficulty using the option -d or --difficulty with the arguments "easy", "medium", "hard" or "insane".
+   The default difficulty of the game is set to Medium. You can change the difficulty using the option -d or --difficulty with the arguments "easy", "medium", "hard" or "insane":
 
    e.g.
    ```
@@ -56,7 +58,8 @@ When you die, you can simply press the SPACE bar to restart, or Q to quit.
 ### INSTRUCTIONS:
 Run the game using the command above, and survive for as long as you possibly can while eating as much food as possible. Try to play at least 10 games, but obviously the more you can play, the more helpful it will be. So take a break from your research, relax and play a few games of Snake.
 
-When you're finished playing your games, email me a zipped version of the Data folder. (email: [matthewreynard24@gmail.com](mailto:matthewreynard24@gmail.com))
+When you're finished playing your games, email me a zipped version of the Data folder.  
+(email: [matthewreynard24@gmail.com](mailto:matthewreynard24@gmail.com))
 
 Thanks everyone, and happy gaming :)
 
