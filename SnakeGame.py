@@ -24,6 +24,9 @@ This could just end the game (but that wont work well.. i think)
 Also, when having 3 actions, the game needs to know what forward means, and at this point, with just
 a head and a food, it doesn't
 
+Quick click tutorial:
+https://www.youtube.com/watch?v=kNke39OZ2k0
+
 '''
 
 import numpy as np
