@@ -6,7 +6,7 @@ setup(
 	description="Snake game",
 	author="Matthew Reynard",
 	author_email="matthewreynard24@gmail.com",
-	url="matthewreynard.com",
+	url="www.matthewreynard.com",
 	# packages=["snake"],
 	py_modules=[
 	"snakeAI",
